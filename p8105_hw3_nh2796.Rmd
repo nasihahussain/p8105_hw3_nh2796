@@ -8,5 +8,56 @@ date: "2024-10-16"
 ```{r}
 library(p8105.datasets)
 data("ny_noaa")
+
+library(tidyverse)
+library(ggplot2)
+```
+
+```{r}
+ny_noaa_df =
+  ny_noaa %>%
+  mutate(year = year(date),
+         month = month(date),
+         day = day(date))
+```
+
+```{r}
+ny_noaa_summary =
+  ny_noaa %>%
+  summarise(across(c(prcp, snow, snwd), list(min = min, max = max, mean = mean), na.rm = TRUE))
+```
+
+snowfall common value
+
+```{r}
+common_snowfall_value = 
+  ny_noaa %>% 
+  count(snow) %>% 
+  arrange(desc(n))
+```
+the most common snowfall value in this dataset besides the days that saw 0 snowfall and the days that had missing data, was 25mm which was observed 38,1221 times. 
+
+##plots
+```{r}
+janjul_data = 
+  ny_noaa_df %>% 
+  filter(month == 1 | month == 7)
+
+janjul_data$tmax <- as.numeric(as.character(janjul_data$tmax))
+
+avg_temp_data = 
+  janjul_data %>%
+  filter(!is.na(tmax)) %>% 
+  group_by(id, year, month) %>% 
+  summarise(avg_max_temp = mean(tmax, na.rm = TRUE)) %>%
+  ungroup()
+
+ 
+
+ggplot(avg_temp_data, aes(x = year, y = avg_max_temp, color = month)) +
+  geom_line(alpha = .5) +
+  facet_grid(. ~ month) +
+  labs(title = "average max temperature by year")
+
 ```
 
