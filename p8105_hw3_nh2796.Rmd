@@ -1,0 +1,12 @@
+---
+title: "p8105_hw3_nh2796"
+output: github_document
+date: "2024-10-16"
+---
+
+##problem 1
+```{r}
+library(p8105.datasets)
+data("ny_noaa")
+```
+
