@@ -20,7 +20,7 @@ ny_noaa_df =
          month = month(date),
          day = day(date))
 ```
-
+Some of the key variables here are the precipitation amount, amount of snowfall, the snow depth, the min and max temperatures. The mean snow depth was 37.31 and the mean snowfall was 4.98mm
 ```{r}
 ny_noaa_summary =
   ny_noaa %>%
@@ -59,5 +59,12 @@ ggplot(avg_temp_data, aes(x = year, y = avg_max_temp, color = month)) +
   facet_grid(. ~ month) +
   labs(title = "average max temperature by year")
 
+```
+
+
+##problem 2
+```{r}
+demo_data = read_csv(file = "./nhanes_covar.csv")
+accel_data = read_csv(file = "./nhanes_accel.csv")
 ```
 
