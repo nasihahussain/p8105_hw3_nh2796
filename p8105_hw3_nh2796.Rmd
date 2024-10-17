@@ -206,9 +206,46 @@ citi_bike_jul2020 =
   janitor::clean_names(citi_bike_jul2020)
 ```
 
+
+```{r}
+citi_bike_jan2020 = 
+  citi_bike_jan2020 %>% 
+  mutate(month = "January", year = 2020)
+
+citi_bike_jul2020 = 
+  citi_bike_jul2020 %>% 
+  mutate(month = "July", year = 2020)
+
+citi_bike_jan2024 = 
+  citi_bike_jan2024 %>% 
+  mutate(month = "January", year = 2024)
+
+citi_bike_jul2024 = 
+  citi_bike_jul2024 %>% 
+  mutate(month = "July", year = 2024)
+
+view(citi_bike_jan2020)
+```
+
 ```{r}
 citi_bike_combined =
   bind_rows(citi_bike_jan2020, citi_bike_jan2024, citi_bike_jul2020, citi_bike_jul2024) %>% drop_na() %>% 
   mutate(duration = as.numeric(duration))
-```
 
+summary(citi_bike_combined)
+
+descriptive_stats = 
+  citi_bike_combined %>%
+  group_by(year, month) %>%
+  summarize(
+    mean_distribution = mean(duration, na.rm = TRUE),
+    max_duration = max(duration, na.rm = TRUE), 
+    min_duration = min(duration, na.rm = TRUE),
+    median_duration = median(duration, na.rm = TRUE),
+    count_rides = n()
+  )
+
+print(descriptive_stats)
+```
+##description of data
+This data shows information about rides taken using citi bike in 2020 and 2024 in the months of january and july. In 2020, July had a higher number of overall rides at 21013 compared to 12398 rides in January of 2020. In comparison, 2024 saw a hige increase in rides in the summer at 47043 rides in July whereas the number of rides in January of 2024 (18799 rides) were much more similar to that of January 2020. The maximum and minimum durations for the rides was relatively consistent across all months and years, with the minimum duration being around 1 minute for each and the max being at around 230 minutes. The median duration was the highest in July of 2020 at 14 minutes. 
