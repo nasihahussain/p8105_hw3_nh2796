@@ -307,7 +307,8 @@ ggplot(citi_data_2024, aes(x = interaction(month, rideable_type), y = duration, 
        x = "Month and Bike Type",
        y = "Ride Duration (min)",
        fill = "Membership Status") +
+  scale_y_continuous(limits = c(0, 75)) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-
+From the box plot that I created showing the distribution of ride duration in 2024, it is clear that the median ride duration for the classic bike in both months of 2024 had more variability for casual riders. The members had a lot less variability in ride duration accross the board. The median duration for the members was also very consistent across the different bike types for all of the months presented. 
