@@ -185,3 +185,30 @@ print(time_mims_plot)
 ```
 ##comments
 Looking at the plot, it is clear that both sexes represented in this data set tend to have similar trends in terms of activity levels throughout a 24 hr day despite education levels. The curves shown in the plot take on a very similar shape overall for all demographic variables. It does seem as though females tend to be slightly higher in activity levels than males during the peak activity time during the 24 hr day for those who are in the high school equivalent and more than high school group. The less than high school group seems to be much more similar in acitivity levels when examining sex. 
+
+##problem 3
+
+```{r}
+citi_bike_jan2020 = read_csv(file = "./data/Jan 2020 Citi.csv")
+citi_bike_jul2020 = read_csv(file = "./data/July 2020 Citi.csv")
+citi_bike_jan2024 = read_csv(file = "./data/Jan 2024 Citi.csv")
+citi_bike_jul2024 = read_csv(file = "./data/July 2024 Citi.csv")
+```
+
+```{r}
+citi_bike_jan2020 =
+  janitor::clean_names(citi_bike_jan2020)
+citi_bike_jul2020 =
+  janitor::clean_names(citi_bike_jul2020)
+citi_bike_jan2024 =
+  janitor::clean_names(citi_bike_jan2024)
+citi_bike_jul2020 =
+  janitor::clean_names(citi_bike_jul2020)
+```
+
+```{r}
+citi_bike_combined =
+  bind_rows(citi_bike_jan2020, citi_bike_jan2024, citi_bike_jul2020, citi_bike_jul2024) %>% drop_na() %>% 
+  mutate(duration = as.numeric(duration))
+```
+
