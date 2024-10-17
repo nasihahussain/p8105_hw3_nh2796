@@ -64,7 +64,27 @@ ggplot(avg_temp_data, aes(x = year, y = avg_max_temp, color = month)) +
 
 ##problem 2
 ```{r}
-demo_data = read_csv(file = "./nhanes_covar.csv")
+demographic_data = read_csv(file = "./nhanes_covar.csv", skip = 4)
 accel_data = read_csv(file = "./nhanes_accel.csv")
+```
+tidying data
+```{r}
+demographic_data = 
+  janitor::clean_names(demographic_data) %>% 
+  filter(age >= 21)
+
+accel_data = 
+  janitor::clean_names(accel_data)
+
+tidy_accel_data = 
+  accel_data %>% 
+  pivot_longer(
+    cols = starts_with("min"),
+    names_to = "Minute",
+    values_to = "MIMS"
+  )
+
+merged_accel_demo = 
+  left_join(demographic_data, tidy_accel_data, by = "seqn")
 ```
 
