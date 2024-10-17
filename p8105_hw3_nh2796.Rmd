@@ -67,7 +67,7 @@ ggplot(avg_temp_data, aes(x = year, y = avg_max_temp, color = month)) +
 demographic_data = read_csv(file = "./nhanes_covar.csv", skip = 4)
 accel_data = read_csv(file = "./nhanes_accel.csv")
 ```
-tidying data
+##tidying data
 ```{r}
 demographic_data = 
   janitor::clean_names(demographic_data) %>% 
@@ -92,12 +92,7 @@ merged_accel_demo =
          age = as.factor(age))
 ```
 
-more cleaning data
-```{r}
-
-
-```
-reader friendly table
+##reader friendly table
 ```{r}
 merged_accel_demo =
   merged_accel_demo %>% 
@@ -118,4 +113,50 @@ summary_table =
 
 print(summary_table)
 ```
+This summary table shows some of the demographic characteristics in the data. We can easily see that more individuals who were both males (80640) and females (84960)in this dataset reported education of more than high school, than reporting less than high school or high school equivalent. There were more males who reported having an education equivalent to highschool than females.
+
+Age Distribution Visualization
+```{r fig.width=7, fig.height=5, dpi=300}
+age_distribution = 
+  ggplot(merged_accel_demo, aes(x = education, y = age, fill = sex)) +
+  geom_boxplot() +
+  labs(title = "Age Distribution by Education and Sex",
+       x = "Education Level", y = "Age") +
+  theme_minimal()
+print(age_distribution)
+
+age_distribution_density =
+  ggplot(merged_accel_demo, aes(x = age, fill = sex)) +
+  geom_density(alpha = 0.5) +
+  facet_wrap(~ education) +
+  labs(title = "Age Distributions by Education and Sex",
+       x = "Age", y = "Density") 
+  
+print(age_distribution_density)
+```
+Comments on Age Distribution: I decided to try two different visualizations for this. I tried a box plot at first and found it to be really helpful to visualize the median age distributions and how they differed by each education group. The median age seems to be higher for females in both the high school equivalent and less than high school groups, than for the males in those groups. Overall, the median age seems to be lower for both sexes for the individuals who got more than a high school education. From the box plot, I can also see that the spread of ages for all sexes and each education group seems to be very similar in terms of length. I noticed that when I knitted this, the box plot that I saw in my rStudio window did not match the image that came up in the github document. So, I decided to look at a density plot to see if it looked better. The density plot showed a similar level of variability in spread, but overall, the box plot gave me more concrete information. 
+
+##Total Activity Data
+```{r}
+total_activity_data =
+  merged_accel_demo %>%
+  group_by(seqn) %>%
+  summarize(total_activity = sum(MIMS, na.rm = TRUE),
+            age = first(age), 
+            sex = first(sex), 
+            education = first(education))
+
+total_activity_plot = 
+  ggplot(total_activity_data, aes(x = age, y = total_activity, color = sex)) +
+  geom_point() + 
+  geom_smooth( se = FALSE) +  
+  facet_wrap(~ education) + 
+  labs(title = "Total Activity vs Age by Education Level",
+       x = "Age",
+       y = "Total Activity",
+       color = "Sex") 
+ggsave("total_activity_plot.png", plot = total_activity_plot, width = 8, height = 6, dpi = 300)  
+```
+Comments on total activity plot: Looking at the plot showing total activity for males and females by education level, one thing that I have noticed is that the trend lines for males and females in the less than high school group seem to be more similar to each other compared to the rather large difference for between male and female total activity for the high school equivalent group. I also noticed that in the more than high school education group, the total activity for both males and females tended to be much closer across the age distribution. On the other hand, when looking at the less than high school group, the younger individuals clearly tended to be much more active compared to the older group. I also thought it was interesting to see that females tended to be more active than males for the more than high school group, and for the high school equivalent group across the distribution of ages. However, for the less than high school group. younger female participants had higher activity than younger males and older male participants had higher activity levels than older females. 
+
 
