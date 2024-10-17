@@ -294,3 +294,20 @@ ggplot(median_ride_duration, aes(x = weekdays, y = median_duration, fill = facto
 ```
 ##comments on median ride duration plot
 Looking at the bar chart that I created examining median ride duration, it is clear that July has consistently higher ride duration times, but ride durations were much higher in 2020 compared to 2024. The ride duration for January is pretty consistent throughout the years. Ride duration was also shown to be higher on saturdays and sundays for both years in July. However, there is some variability with this in January. 
+
+##2024 data
+
+```{r}
+citi_data_2024 <- citi_bike_combined %>% 
+  filter(year == 2024)
+
+ggplot(citi_data_2024, aes(x = interaction(month, rideable_type), y = duration, fill = member_casual)) +
+  geom_boxplot(outlier.shape = NA) +
+  labs(title = "Distribution of Ride Duration in 2024",
+       x = "Month and Bike Type",
+       y = "Ride Duration (min)",
+       fill = "Membership Status") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
